@@ -1,14 +1,20 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
-//allegro vars
+// allegro vars
 ALLEGRO_DISPLAY* display = NULL;
 ALLEGRO_TIMER* timer = NULL;
 ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 
+// allegro bitmaps
+ALLEGRO_BITMAP* loafOfDoge = NULL;
+
 const float FPS = 1;
 
-int draw() {                                                                                                            
+int draw() {    
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_draw_bitmap(loafOfDoge, 540, 320, 0);
+    al_flip_display();
     return 0;
 }
 
@@ -16,8 +22,14 @@ int main (int argc, char *argv[])
 {
     // initialize allegro screen
     al_init();
+    al_init_image_addon();
 
+    al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_FULLSCREEN_WINDOW);
     display = al_create_display(1080, 640);
+    al_set_window_title(display, "Loaf Of Doge");
+
+    // load images
+    loafOfDoge = al_load_bitmap("loafOfDoge.png");
 
     timer = al_create_timer(1.0/FPS);
     al_start_timer(timer);
