@@ -1,0 +1,2 @@
+g++ The-Mandalorian.cpp -o The-Mandalorian -lallegro -lallegro_image
+./The-Mandalorian 2
