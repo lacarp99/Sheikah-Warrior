@@ -11,18 +11,22 @@ ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 
 // allegro bitmaps
 ALLEGRO_BITMAP* testcharacter = NULL;
+ALLEGRO_BITMAP* battleground = NULL;
 
 int heroX = 0;
 int heroY = 0;
 int heroDestinationX = 0;
 int heroDestinationY = 0;
 int heromovespeed = 3;
+int mapPos = 0;
+
+char moving = 's';
 
 const float FPS = 60;
 
 int draw() {
-    al_clear_to_color(al_map_rgb(0, 0, 0));
-    al_draw_bitmap(testcharacter, heroX, heroY, 0);
+    al_draw_bitmap(battleground, mapPos, 0, 0);
+    al_draw_bitmap(testcharacter, heroX + mapPos, heroY, 0);
     al_flip_display();
     return 0;
 }
@@ -33,13 +37,15 @@ int main (int argc, char *argv[])
     al_init();
     al_init_image_addon();
     al_install_mouse();
+    al_install_keyboard();
 
     al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_RESIZABLE);
-    display = al_create_display(1080, 640);
+    display = al_create_display(1080, 720);
     al_set_window_title(display, "The Mandalorian");
 
     // load images
     testcharacter = al_load_bitmap("testcharacter.png");
+    battleground = al_load_bitmap("battleground.png");
 
     timer = al_create_timer(1.0/FPS);
     al_start_timer(timer);
@@ -49,6 +55,7 @@ int main (int argc, char *argv[])
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_register_event_source(event_queue, al_get_mouse_event_source());
+    al_register_event_source(event_queue, al_get_keyboard_event_source());
 
     bool running = true;
 
@@ -81,6 +88,14 @@ int main (int argc, char *argv[])
                     heroY += heromovespeed;
                 }
             }
+            switch (moving) {
+            case 'f':
+                mapPos -= 2;
+                break;
+            case 'b':
+                mapPos += 2;
+                break;
+            }
             draw();
             break;
         case ALLEGRO_EVENT_MOUSE_BUTTON_UP: 
@@ -89,6 +104,19 @@ int main (int argc, char *argv[])
                     heroDestinationY = event.mouse.y;
                     break;
             }
+        case ALLEGRO_EVENT_KEY_DOWN:
+            switch(event.keyboard.keycode){
+            case ALLEGRO_KEY_RIGHT:
+                moving = 'f';
+                break;
+            case ALLEGRO_KEY_LEFT:
+                moving = 'b';
+                break;
+            }
+            break;
+        case ALLEGRO_EVENT_KEY_UP:
+            moving = 's';
+            break;
         }
     }
 
