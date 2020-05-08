@@ -14,6 +14,8 @@ ALLEGRO_BITMAP* testcharacter = NULL;
 
 int heroX = 0;
 int heroY = 0;
+int heroDestinationX = 0;
+int heroDestinationY = 0;
 
 const float FPS = 1;
 
@@ -66,6 +68,22 @@ int main (int argc, char *argv[])
             break;
         case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
             if (event.mouse.button == 1) {
+                if (heroX != heroDestinationX) {
+                    if (heroX > heroDestinationX) {
+                        heroX -= 1;
+                    }
+                    else {
+                        heroX += 1;
+                    }
+                }
+                if (heroY != heroDestinationY) {
+                    if (heroY > heroDestinationY) {
+                        heroY -= 1;
+                    }
+                    else {
+                        heroY += 1;
+                    }
+                }
                 heroX = event.mouse.x;
                 heroY = event.mouse.y;
             }
