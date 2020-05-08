@@ -16,10 +16,11 @@ int heroX = 0;
 int heroY = 0;
 int heroDestinationX = 0;
 int heroDestinationY = 0;
+int heromovespeed = 3;
 
-const float FPS = 1;
+const float FPS = 60;
 
-int draw() {    
+int draw() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_draw_bitmap(testcharacter, heroX, heroY, 0);
     al_flip_display();
@@ -64,30 +65,30 @@ int main (int argc, char *argv[])
             running = false;
             break;
         case ALLEGRO_EVENT_TIMER:
+            if (heroX <= heroDestinationX - heromovespeed || heroX >= heroDestinationX + heromovespeed) {
+                if (heroX > heroDestinationX) {
+                    heroX -= heromovespeed;
+                }
+                else {
+                    heroX += heromovespeed;
+                }
+            }
+            if (heroY <= heroDestinationY - heromovespeed || heroY >= heroDestinationY + heromovespeed) {
+                if (heroY > heroDestinationY) {
+                    heroY -= heromovespeed;
+                }
+                else {
+                    heroY += heromovespeed;
+                }
+            }
             draw();
             break;
-        case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+        case ALLEGRO_EVENT_MOUSE_BUTTON_UP: 
             if (event.mouse.button == 1) {
-                if (heroX != heroDestinationX) {
-                    if (heroX > heroDestinationX) {
-                        heroX -= 1;
-                    }
-                    else {
-                        heroX += 1;
-                    }
-                }
-                if (heroY != heroDestinationY) {
-                    if (heroY > heroDestinationY) {
-                        heroY -= 1;
-                    }
-                    else {
-                        heroY += 1;
-                    }
-                }
-                heroX = event.mouse.x;
-                heroY = event.mouse.y;
+                    heroDestinationX = event.mouse.x;
+                    heroDestinationY = event.mouse.y;
+                    break;
             }
-            break;
         }
     }
 
